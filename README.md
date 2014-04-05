@@ -54,7 +54,7 @@ After you start your application, take a look at the dashboard:
 
     http://your-application.com/ensnare/dashboard
 
-**Optional**
+In order to access the dashboard, this step needs to be performed.   
 
 To prevent unnecessary users from accessing the dashboard, add the following to the `config/initalizers/ensanre.rb` file:
 ```ruby
