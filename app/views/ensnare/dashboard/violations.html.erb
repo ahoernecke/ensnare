@@ -1,0 +1,32 @@
+<table class="table">
+    <thead>
+        <tr>
+            <th>Event Time</th>
+            <th>Weight</th>
+            <th>IP Address</th>
+            <th>Session Id</th>
+            <th>User Id</th>
+            <th>Type</th>
+            <th>Name</th>
+            <th>Expected Value</th>
+            <th>Observed Value</th>
+        </tr>
+    </thead>
+    <tbody>
+    <% @violations.each do |v| %>
+        <tr>
+            <td><%= v.created_at.to_s %></td>
+            <td><%= v.weight.to_s %></td>
+            <td><%= v.ip_address.to_s %></td>
+            <td><%= v.session_id.to_s %></td>
+            <td><%= v.user_id.to_s %></td>
+            <td><%= v.violation_type.to_s %></td>
+            <td><%= v.name.to_s %></td>
+            <td><%= v.expected.to_s %></td>
+            <td><%= v.observed.to_s %></td>
+        </tr>
+    <% end %>
+    </tbody>
+</table>
+
+

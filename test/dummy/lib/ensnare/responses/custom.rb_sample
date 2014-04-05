@@ -1,0 +1,11 @@
+class Ensnare::Response::Custom < Ensnare::Response::Response    
+
+    def run
+        if(!@violations.blank?)
+            @flash[:error] = @options[:content] || "We have notice malicious activity from your IP Address/session. Please do not be evil."
+        end
+
+        return false
+    end
+
+end

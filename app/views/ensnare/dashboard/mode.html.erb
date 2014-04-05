@@ -1,0 +1,75 @@
+</div><!--/.nav-collapse -->
+</div>
+</div>
+</div>
+</div>
+
+<div class="container">
+  <div class="row">
+    <div class="span6">
+      <% if Ensnare.error_message %>
+      <div class="alert alert-error">
+        <button type="button" class="close" data-dismiss="alert">&times;</button>
+
+        <%= Ensnare.error_message %>
+      </div>
+      <% end %>
+      <% if Ensnare.warning_message %>
+      <div class="alert alert-warning">
+        <button type="button" class="close" data-dismiss="alert">&times;</button>
+
+        <%= Ensnare.warning_message %>
+      </div>
+      <% end %>
+      <% if @mode == :enforce %>
+      <div class="alert alert-warning">
+        <button type="button" class="close" data-dismiss="alert">&times;</button>
+        Ensnare is in <strong>'Enforce'</strong> mode.
+      </div>
+      <% elsif @mode == :log %>
+      <div class="alert alert-warning">
+        <button type="button" class="close" data-dismiss="alert">&times;</button>
+        Ensnare is in <strong>'Log Only'</strong> mode.
+      </div>
+      <% elsif @mode == :disabled %>
+      <div class="alert alert-warning">
+        <button type="button" class="close" data-dismiss="alert">&times;</button>
+        Ensnare is in <strong>'Disabled'</strong> mode.
+      </div>
+      <% end %>
+      <h2>Ensnare Setup</h2><br>
+      <div class="alert hidden" id="error_display">
+        <button type="button" class="close" data-dismiss="alert">&times;</button>
+        <strong>Invalid settings or server is down!</strong>
+      </div>
+      <div class="well">
+        These changes are not persistent.  Edit "ensnare.rb" config file for persistent changes.
+        <hr>
+        <%= form_tag change_mode_url do %>
+
+        <div class="control-group">
+          <div class="options">
+            <label>
+              <input type="radio" name="mode" id="disabled" value="disabled">
+              Disabled.
+            </label>
+          </div>
+          <div class="options">
+            <label>
+              <input type="radio" name="mode" id="log" value="log">
+              Log only mode.
+            </label>
+          </div>
+          <div class="options">
+            <label>
+              <input type="radio" name="mode" id="enforce" value="enforce">
+              Enforce.
+            </label>
+          </div>
+        </br>
+        <%= submit_tag "Submit Settings", :class => "btn btn-primary"%>
+        <% end %>
+      </div>
+    </div>
+  </div>
+</div>

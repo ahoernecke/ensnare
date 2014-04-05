@@ -1,0 +1,108 @@
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>Ensnare Widgets</title>
+
+    <%= stylesheet_link_tag    "application", :media => "all" %>
+    <%= javascript_include_tag "application" %>
+    <%= csrf_meta_tags %>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <!-- Le styles -->
+    <link href="../assets/css/bootstrap.css" rel="stylesheet">
+    <style type="text/css">
+      body {
+        padding-top: 60px;
+        padding-bottom: 40px;
+      }
+    </style>
+
+  </head>
+
+  <body>
+
+    <div class="navbar navbar-inverse navbar-fixed-top">
+      <div class="navbar-inner">
+        <div class="container">
+          <button type="button" class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="brand" href="#">Project name</a>
+          <div class="nav-collapse collapse">
+            <ul class="nav">
+              <li class="active"><a href="/">Home</a></li>
+              <li><%=link_to "Widgets", widgets_path %></li>
+              
+            </ul>
+
+            <% if user_signed_in? %>
+                <ul class="nav pull-right">
+                  <li><a href="#">Welcome <%= current_user.email %></a></li>
+                  <li class="divider-vertical"></li>
+                  <li><%= link_to('Logout', destroy_user_session_path, :method => :delete) %>  </li>
+                </ul>
+                
+            <% else %>
+                <ul class="nav pull-right">
+                    <li>
+                        <%= form_tag user_session_path, :class=>"navbar-form pull-right" do %>
+                            <%= text_field_tag 'user[email]', nil, {:class=>"span2", :placeholder=>"Email"} %>
+                            <%= password_field_tag 'user[password]', nil , {:class=>"span2", :placeholder=>"Password"} %>
+                            <%= submit_tag "Sign in", :class=>"btn" %>
+                        <% end %>
+                    </li>
+                    <li class="divider-vertical"></li>
+                    <li>
+                        <%= link_to('Sign up', new_user_registration_path)  %>
+                    </li>
+            <% end %>
+            
+          </div><!--/.nav-collapse -->
+        </div>
+      </div>
+    </div>
+
+    <div class="container">
+
+      <% if flash[:alert] %>
+        <div class="alert">
+          <%= flash[:alert] %>
+        </div>
+      <% end %>
+      <% if flash[:error] %>
+        <div class="alert alert-error">
+          <%= flash[:error] %>
+        </div>
+      <% end %>
+      <% if flash[:notice] %>      
+        <div class="alert alert-success">
+          <%= flash[:notice] %>
+        </div>
+      <% end %>      
+      
+      <%= yield %>
+
+      <hr>
+
+      <footer>
+        <p>&copy; Ensnare 2013</p>
+        <h3>Session</h3>
+        <p><%= session.inspect %>
+        <h3>params</h3>
+        <p><%= params.inspect %>
+      </footer>
+
+    </div> <!-- /container -->
+
+
+  </body>
+</html>
+
+
+

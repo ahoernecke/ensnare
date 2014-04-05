@@ -1,0 +1,11 @@
+<h1>Uh oh!</h1>
+<% if(request.post?) %>
+    <p class="text-error">Unable to validate your response. Please try again.</p>
+<% end %>
+<p>Something has gone wrong. Please confirm you are human.<p>
+<%= form_tag captcha_path do  %>
+    <%= recaptcha_tags %>
+    <%= submit_tag %>
+<% end %>
+
+

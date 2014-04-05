@@ -1,0 +1,51 @@
+
+<!DOCTYPE html>
+<!-- saved from url=(0060)http://getbootstrap.com/2.3.2/examples/starter-template.html -->
+<html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta charset="utf-8">
+<title><%= content_for?(:title) ? yield(:title) : "Ensnare" %></title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <%= stylesheet_link_tag "ensnare/application", :media => "all" %>
+    <%= javascript_include_tag "ensnare/application" %>
+
+<!-- <link rel="stylesheet" href="css/bootstrap-switch.css">
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+<script src="js/bootstrap-switch.js"></script>
+
+<script src="http://cdnjs.cloudflare.com/ajax/libs/bootstrap-switch/1.7/bootstrap-switch.min.js"> </script>
+<link href="css/bootstrap.css" rel="stylesheet">
+<link rel="stylesheet" href="css/toggle-switch.css"> -->
+<style>
+body {
+  padding-top: 60px; /* 60px to make the container go all the way to the bottom of the topbar */
+}
+</style>
+
+
+
+<!-- Fav and touch icons -->
+<!-- Size should be 144 x 144 pixels -->
+<%= favicon_link_tag 'apple-touch-icon-144x144-precomposed.png', :rel => 'apple-touch-icon-precomposed', :type => 'image/png', :sizes => '144x144' %>
+
+<!-- For iPhone with high-resolution Retina display: -->
+<!-- Size should be 114 x 114 pixels -->
+<%= favicon_link_tag 'apple-touch-icon-114x114-precomposed.png', :rel => 'apple-touch-icon-precomposed', :type => 'image/png', :sizes => '114x114' %>
+
+<!-- For first- and second-generation iPad: -->
+<!-- Size should be 72 x 72 pixels -->
+<%= favicon_link_tag 'apple-touch-icon-72x72-precomposed.png', :rel => 'apple-touch-icon-precomposed', :type => 'image/png', :sizes => '72x72' %>
+
+<!-- For non-Retina iPhone, iPod Touch, and Android 2.1+ devices: -->
+<!-- Size should be 57 x 57 pixels -->
+<%= favicon_link_tag 'apple-touch-icon-precomposed.png', :rel => 'apple-touch-icon-precomposed', :type => 'image/png' %>
+
+<!-- For all other devices -->
+<!-- Size should be 32 x 32 pixels -->
+</head>
+
+    <body>
+        <%= yield %>
+    </body>
+</html>

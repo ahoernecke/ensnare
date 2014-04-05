@@ -1,0 +1,38 @@
+<div class="container">
+    <div class="row">
+      <div class="span12">
+          <% if Ensnare.error_message %>
+          <div class="alert alert-error">
+            <button type="button" class="close" data-dismiss="alert">&times;</button>
+            <%= Ensnare.error_message %>
+        </div>
+        <% end %>
+        <% if Ensnare.warning_message %>
+        <div class="alert alert-warning">
+            <button type="button" class="close" data-dismiss="alert">&times;</button>
+            <%= Ensnare.warning_message %>
+        </div>
+        <% end %>
+        <h2>Metrics</h2><br>
+        <div class="well">
+            <h3>Basic</h3>
+            <dl class="dl-horizontal">
+                <dt>Violation Count:</dt>
+                <dd><%= @violations.count %></dd>
+                <dt>Unique IPs:</dt>
+                <dd><%= @violations_by_ip.count %></dd>
+                <dt>Unique Sessions:</dt>
+                <dd><%= @violations_by_session.count %></dd>
+            </dl>
+
+            <%= render :partial=>'ensnare/dashboard/metrics/table', :locals=>{:title=>"Violation Type", :objects=>@violations_by_type} %>
+
+            <%= render :partial=>'ensnare/dashboard/metrics/table', :locals=>{:title=>"IP Address", :objects=>@violations_by_ip} %>
+
+            <%= render :partial=>'ensnare/dashboard/metrics/table', :locals=>{:title=>"Session ID", :objects=>@violations_by_session} %>
+
+            <%= render :partial=>'ensnare/dashboard/metrics/table', :locals=>{:title=>"User ID", :objects=>@violations_by_user_id} %>
+
+        </div>
+    </div>
+</div>

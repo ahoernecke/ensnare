@@ -1,0 +1,17 @@
+<h3><%= title %></h3>
+<table class="table">
+    <thead>
+        <tr>
+            <th>Id</th>
+            <th>Count</th>
+        </tr>
+    </thead>
+    <tbody>
+        <% objects.each do |key, value| %>
+        <tr>
+            <td><%= key.blank? ? "<blank>" : key %></td>
+            <td><%= value %></td>
+        </tr>
+        <% end %>
+    </tbody>
+</table>

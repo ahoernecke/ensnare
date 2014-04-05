@@ -1,0 +1,1191 @@
+<div class="pull-right">
+   </button>
+ </div>
+</div><!--/.nav-collapse -->
+</div>
+</div>
+</div>
+<div class="container">
+  <div class="row">
+    <div class="span4">
+      <% if Ensnare.error_message %>
+      <div class="alert alert-error">
+        <button type="button" class="close" data-dismiss="alert">&times;</button>
+        <%= Ensnare.error_message %>
+      </div>
+      <% end %>
+      <% if Ensnare.warning_message %>
+      <div class="alert alert-warning">
+        <button type="button" class="close" data-dismiss="alert">&times;</button>
+        <%= Ensnare.warning_message %>
+      </div>
+      <% end %>
+
+
+<h2>Configuration</h2><br />
+<div class="alert">
+<strong>'<%= !Ensnare.type.nil? ? Ensnare.type : "custom" =%>'</strong> configuration file is loaded.</div>
+<div class="well">
+  <ul class="nav nav-list">
+    <li class="nav-header">Configuration Modes</li>
+    <li class="active" id="log_only_nav"><a href="#">Log Only</a></li>
+    <li class="" id="time_throttle_nav"><a href="#">Time Throttle</a></li>
+    <li class="" id="light_nav"><a href="#">Light</a></li>
+    <li class="" id="medium_nav"><a href="#">Medium</a></li>
+    <li class="" id="heavy_nav"><a href="#">Heavy</a></li>
+    <li class="" id="custom_nav"><a href="#">Custom</a></li>
+  </ul>
+</div>
+
+
+<div class="well">
+  <ul class="nav nav-list">
+    <li class="nav-header">How to Set Configuration Mode</li>
+    Choose a Configuration Mode and select the Copy to Clipboard button.<br><br>
+    Next, create the config file <strong> ensnare.rb</strong> in your applications initializers folder
+    <br><br><pre class="prettyprint">/your_app/config/initializers/ensnare.rb</pre>
+    To load the configuration, restart your application.
+  </ul>
+</div>
+</div>
+
+<div class="span8">
+  <h2><div id="config_name">Log only</div>
+    <button id="copy-button" class="btn" data-clipboard-target="" title="Click to copy me.">Copy to Clipboard</button></h2>
+  </div>
+<div class="span8" id="log_only">
+<p>This configuration places Ensnare in 'Log Only' mode. Violation count per IP address and session
+  will be logged and viewable on the metrics page. Violation count will reset if no
+  violations for the associated IP trigger in 4000 seconds.<br /></p>
+    <br />
+    <pre class="prettyprint" id="log_only_config" name="log_only_config">
+# log_only configuration file
+Ensnare.setup do |config|
+
+# Config type
+config.type = :log_only
+
+# Settings to configure the operation mode of config.
+# Disable Ensnare from running.
+config.mode = :log
+
+# Log violation counts for both user account and IP address that triggers the trap
+config.trap_on = [:ip, :session]
+
+# Sets the global violation timer (in seconds) which will reset
+# the violation count for the assocaited IP or user account.
+# This violation count resets after the suspicious IP or user account stops triggering traps.
+config.global_timer = 4000
+
+config.enabled_traps = [
+{:type=>:cookie,
+ :options=>{
+    # :admin => this sets a cookie named admin with a boolean value set to false
+    # :debug => this sets a cookie named debug with a boolean value set to false
+    # :random => this generates a random N character cookie with a random encrypted value
+    # :google => this generates 4 random cookies that look like Google tracking
+    # :uid => this sets a cookie that look like a UID
+    # :gid => this sets a cookie that looks like a GID
+
+    :predefined_cookies=>[:uid]
+ }
+ },
+{:type=>:parameter,
+ :options=>{
+    # Select a predefined selection of parameter names.
+    # :admin => this sets a cookie named admin with a boolean value set to false
+    # :debug => this sets a cookie named debug with a boolean value set to false
+    # :random => this cookie generates a random N character cookie with a random encrypted value
+    # :uid => this sets a cookie that look like a UID
+    # :gid => this sets a cookie that looks like a GID
+
+    :predefined_parameters=>[:debug, :random]
+ }
+ }
+]
+  config.thresholds = []
+
+  config.thresholds << {:timer=>1000, :trap_count=>1,
+                        :traps=>[
+                          {:trap=>"none",:weight=>100}
+  ]}
+end
+</pre>
+
+<h2>Description</h2><br />
+  <p>The following <strong>Cookie</strong> traps are enabled:</p>
+  <table class="table table-striped">
+    <thead>
+      <tr>
+        <th>Cookie</th>
+        <th>Value</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>debug</td>
+        <td>boolean</td>
+        <td>debug cookie that is set by default to false</td>
+      </tr>
+      <tr>
+        <td>random</td>
+        <td>random 32 character cookie name and value</td>
+        <td>This cookie is a random N character name with a random encrypted
+          value</td>
+        </tr>
+      </tbody>
+    </table><br />
+
+    <p>The following <strong>Parameter</strong> traps are enabled:</p>
+
+    <table class="table table-striped">
+      <thead>
+        <tr>
+          <th>Parameter</th>
+          <th>Value</th>
+          <th>Description</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>uid</td>
+          <td>integer</td>
+          <td>uid parameter with a randomm numerical value</td>
+        </tr>
+        <tr>
+          <td>gid</td>
+          <td>integer</td>
+          <td>gid parameter with a random numerical value</td>
+        </tr>
+      </tbody>
+    </table><br />
+    <br />
+    <p><br><br><br>
+    </div>
+
+
+    <div class="span8 hidden" id="time_throttle">
+      <p>This configuration places Ensnare in 'Time Throttle' mode. This simple mode provides some very basic protection
+        from attackers by introducing delays into responses. The global violation count will reset if no
+        traps for the associated IP/session trigger in 4000 seconds.<br /></p><br />
+        <pre class="prettyprint" id="time_throttle_config">
+# time_throttle configuration
+Ensnare.setup do |config|
+
+# Configuration type
+config.type = :time_throttle
+
+# Settings to configure the operation mode of config.
+# Disable Ensnare from running.
+config.mode = :enforce
+
+# Log violation counts for both user account and IP address that triggers the trap
+config.trap_on = [:ip, :session]
+
+# Sets the global violation timer (in seconds) which will reset
+# the violation count for the assocaited IP or user account.
+# This violation count resets after the suspicious IP or user account stops triggering traps.
+config.global_timer = 4000
+
+config.enabled_traps = [
+{:type=>:cookie,
+ :options=>{
+    # :admin => this sets a cookie named admin with a boolean value set to false
+    # :debug => this sets a cookie named debug with a boolean value set to false
+    # :random => this generates a random N character cookie with a random encrypted value
+    # :google => this generates 4 random cookies that look like Google tracking
+    # :uid => this sets a cookie that look like a UID
+    # :gid => this sets a cookie that looks like a GID
+
+    :predefined_cookies=>[:uid]
+ }
+ },
+{:type=>:parameter,
+ :options=>{
+    # Select a predefined selection of parameter names.
+    # :admin => this sets a cookie named admin with a boolean value set to false
+    # :debug => this sets a cookie named debug with a boolean value set to false
+    # :random => this cookie generates a random N character cookie with a random encrypted value
+    # :uid => this sets a cookie that look like a UID
+    # :gid => this sets a cookie that looks like a GID
+
+    :predefined_parameters=>[:debug, :random]
+ }
+ }
+]
+
+config.thresholds = []
+# Violation Threshold Group 1
+config.thresholds << {:timer=>360, :violation_count=>5,
+:responses=>[
+{:response=>"throttle",:weight=>30,:min_delay=>1,:max_delay=>5},
+{:response=>"none", :weight=>70}
+]}
+
+# Violation Threshold Group 2
+config.thresholds << {:timer=>360, :violation_count=>10,
+:responses=>[
+{:response=>"throttle",:weight=>60,:min_delay=>5,:max_delay=>15},
+{:response=>"none", :weight=>40}
+]}
+
+# Violation Threshold Group 3
+config.thresholds << {:timer=>2160, :violation_count=>20,
+:responses=>[
+{:response=>"throttle",:weight=>80,:min_delay=>10,:max_delay=>15},
+{:response=>"none", :weight=>20}
+]}
+end
+    </pre>
+
+      <h2>Description</h2><br />
+        <p>The following <strong>Cookie</strong> traps are enabled:</p>
+        <table class="table table-striped">
+          <thead>
+            <tr>
+              <th>Cookie</th>
+              <th>Value</th>
+              <th>Description</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>random</td>
+              <td>random 32 character cookie name and value</td>
+              <td>This cookie is a random N character name with a random encrypted
+                value</td>
+              </tr>
+            </tbody>
+          </table><br />
+          <p>The following <strong>Parameter</strong> traps are enabled:</p>
+          <table class="table table-striped">
+            <thead>
+              <tr>
+                <th>Parameter</th>
+                <th>Value</th>
+                <th>Description</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>uid</td>
+                <td>integer</td>
+                <td>uid parameter with a randomm numerical value</td>
+              </tr>
+              <tr>
+                <td>gid</td>
+                <td>integer</td>
+                <td>gid parameter with a random numerical value</td>
+              </tr>
+            </tbody>
+          </table><br />
+          <br />
+
+          <p>The following <strong>Violation Thresholds</strong> are configured:</p>
+          <table class="table table-striped">
+            <thead>
+              <tr>
+                <th>Threshold</th>
+                <th>Violation Count</th>
+                <th>Timer</th>
+                <th>Responses</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Group 1</td>
+                <td>5</td>
+                <td>5 minutes</td>
+                <td>
+                <strong>Throttle</strong> (30% of requests) with a 1-5 second random delay</br>
+                <strong>None</strong> (70% of requests) do nothing</br>
+              </td>
+            </tr>
+            <tr>
+              <td>Group 2</td>
+              <td>10</td>
+              <td>5 minutes</td>
+              <td>
+              <strong>Throttle</strong> (60% of requests) with a 5-15 second random delay</br>
+              <strong>None</strong> (40% of requests) do nothing</br>
+            </td>
+          </tr>
+          <tr>
+            <td>Group 3</td>
+            <td>20</td>
+            <td>30 minutes</td>
+            <td>
+            <strong>Throttle</strong> (80% of requests) with a 10-15 second random delay</br>
+            <strong>None</strong> (20% of requests) do nothing</br>
+          </td>
+        </tr>
+      </tbody>
+    </table><br />
+    <br />
+    </div>
+
+    <div class="span8 hidden" id="light">
+      <p>This configuration places Ensnare in 'Light' mode. This simple mode provides notifications to potentially malicious users.
+        This mode will not slow or disrupt the attackers workflow, it will just notify them of their actions.
+        traps for the associated IP/session trigger in 4000 seconds.<br /></p><br />
+        <pre class="prettyprint" id="light_config">
+# light configuration
+Ensnare.setup do |config|
+
+# Config type
+config.type = :light
+
+# Settings to configure the operation mode of config.
+# Disable Ensnare from running.
+config.mode = :enforce
+
+# Log violation counts for both user account and IP address that triggers the trap
+config.trap_on = [:ip, :session]
+
+# Sets the global violation timer (in seconds) which will reset
+# the violation count for the assocaited IP or user account.
+# This violation count resets after the suspicious IP or user account stops triggering traps.
+config.global_timer = 4000
+
+# Cookie Trapping:
+config.enabled_traps = [
+{:type=>:cookie,
+ :options=>{
+    # :admin => this sets a cookie named admin with a boolean value set to false
+    # :debug => this sets a cookie named debug with a boolean value set to false
+    # :random => this generates a random N character cookie with a random encrypted value
+    # :google => this generates 4 random cookies that look like Google tracking
+    # :uid => this sets a cookie that look like a UID
+    # :gid => this sets a cookie that looks like a GID
+
+    :predefined_cookies=>[:debug, :random]
+ }
+ },
+{:type=>:parameter,
+ :options=>{
+    # Select a predefined selection of parameter names.
+    # :admin => this sets a cookie named admin with a boolean value set to false
+    # :debug => this sets a cookie named debug with a boolean value set to false
+    # :random => this cookie generates a random N character cookie with a random encrypted value
+    # :uid => this sets a cookie that look like a UID
+    # :gid => this sets a cookie that looks like a GID
+
+    :predefined_parameters=>[:admin, :uid]
+ }
+ }
+]
+
+config.thresholds = []
+# Violation Threshold Group 1
+config.thresholds << {:timer=>360, :violation_count=>1,
+:responses=>[
+{:response=>"message",:weight=>100,:content =>"You are behaving bad, please stop it!"},
+]}
+
+end
+        </pre>
+
+      <h2>Description</h2><br />
+        <p>The following <strong>Cookie</strong> traps are enabled:</p>
+        <table class="table table-striped">
+          <thead>
+            <tr>
+              <th>Cookie</th>
+              <th>Value</th>
+              <th>Description</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>debug</td>
+              <td>boolean</td>
+              <td>debug cookie that is set by default to false</td>
+            </tr>
+            <tr>
+              <td>random</td>
+              <td>random 32 character cookie name and value</td>
+              <td>This cookie is a random N character name with a random encrypted
+                value</td>
+              </tr>
+            </tbody>
+          </table><br />
+
+          <p>The following <strong>Parameter</strong> traps are enabled:</p>
+          <table class="table table-striped">
+            <thead>
+              <tr>
+                <th>Parameter</th>
+                <th>Value</th>
+                <th>Description</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>admin</td>
+                <td>boolean</td>
+                <td>admin parameter with a boolean value</td>
+              </tr>
+              <tr>
+                <td>uid</td>
+                <td>integer</td>
+                <td>uid parameter with a random numerical value</td>
+              </tr>
+            </tbody>
+          </table><br />
+          <br />
+
+          <p>The following <strong>Violation Thresholds</strong> are configured:</p>
+
+          <table class="table table-striped">
+            <thead>
+              <tr>
+                <th>Threshold</th>
+                <th>Violation Count</th>
+                <th>Timer</th>
+                <th>Responses</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Group 1</td>
+                <td>1</td>
+                <td>5 minutes</td>
+                <td>
+                <strong>Message</strong> (100% of requests) display a warning message</br>
+              </td>
+            </tr>
+          </tbody>
+        </table><br />
+        </div>
+
+        <div class="span8 hidden" id="medium">
+          <p>This configuration places Ensnare in 'Medium' mode. This mode warns the attacker as well as present captcha images to solve and some application error messages. The global violation count will reset if no
+            traps for the associated IP trigger in 4000 seconds.</p><br />
+          <pre class="prettyprint" id="medium_config">
+# medium configuration
+Ensnare.setup do |config|
+
+# Configuration type
+config.type = :medium
+
+# Settings to configure the operation mode of config.
+# Disable Ensnare from running.
+config.mode = :enforce
+
+# Log violation counts for both user account and IP address that triggers the trap
+config.trap_on = :ip
+
+# Sets the global violation timer (in seconds) which will reset
+# the violation count for the assocaited IP or user account.
+# This violation count resets after the suspicious IP or user account stops triggering traps.
+config.global_timer = 4000
+
+config.enabled_traps = [
+{:type=>:cookie,
+ :options=>{
+    # :admin => this sets a cookie named admin with a boolean value set to false
+    # :debug => this sets a cookie named debug with a boolean value set to false
+    # :random => this generates a random N character cookie with a random encrypted value
+    # :google => this generates 4 random cookies that look like Google tracking
+    # :uid => this sets a cookie that look like a UID
+    # :gid => this sets a cookie that looks like a GID
+
+    :predefined_cookies=>[:random, :uid, :gid]
+ }
+ },
+{:type=>:parameter,
+ :options=>{
+    # Select a predefined selection of parameter names.
+    # :admin => this sets a cookie named admin with a boolean value set to false
+    # :debug => this sets a cookie named debug with a boolean value set to false
+    # :random => this cookie generates a random N character cookie with a random encrypted value
+    # :uid => this sets a cookie that look like a UID
+    # :gid => this sets a cookie that looks like a GID
+
+    :predefined_parameters=>[:debug, :random]
+ }
+ }
+]
+
+config.thresholds = []
+# Violation Threshold Group 1
+config.thresholds << {:timer=>360, :violation_count=>5,
+:responses=>[
+{:response=>"captcha"}
+]}
+
+# Violation Threshold Group 2
+config.thresholds << {:timer=>360, :violation_count=>10,
+:responses=>[
+{:response=>"captcha"},
+{:response=>"message",:weight=>100,:content=>"Stop messing with me!"}
+]}
+
+# Violation Threshold Group 3
+config.thresholds << {:timer=>2160, :violation_count=>20,
+:responses=>[
+{:response=>"captcha"},
+{:response=>"server_error",:weight=>60},
+{:response=>"not_found",:weight=>20},
+{:response=>"none",:weight=>20}
+]}
+end
+        </pre>
+          <h2>Description</h2><br />
+            <p>The following <strong>Cookie</strong> traps are enabled:</p>
+            <table class="table table-striped">
+              <thead>
+                <tr>
+                  <th>Cookie</th>
+                  <th>Value</th>
+                  <th>Description</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>random</td>
+                  <td>random 32 character cookie name and value</td>
+                  <td>This cookie is a random N character name with a random encrypted
+                    value</td>
+                  </tr>
+                  <tr>
+                    <td>uid</td>
+                    <td>integer</td>
+                    <td>uid parameter with a randomm numerical value</td>
+                  </tr>
+                  <tr>
+                    <td>gid</td>
+                    <td>integer</td>
+                    <td>gid parameter with a random numerical value</td>
+                  </tr>
+                </tbody>
+              </table><br />
+
+              <p>The following <strong>Parameter</strong> traps are enabled:</p>
+              <table class="table table-striped">
+                <thead>
+                  <tr>
+                    <th>Parameter</th>
+                    <th>Value</th>
+                    <th>Description</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>debug</td>
+                    <td>boolean</td>
+                    <td>debug parameter with a boolean set to false</td>
+                  </tr>
+                  <td>random</td>
+                  <td>random 32 character cookie name and value</td>
+                  <td>This cookie is a random N character name with a random encrypted
+                    value</td>
+                  </tr>
+                </tbody>
+              </table><br />
+              <br />
+
+              <p>The following <strong>Violation Thresholds</strong> are configured:</p>
+              <table class="table table-striped">
+                <thead>
+                  <tr>
+                    <th>Threshold</th>
+                    <th>Violation Count</th>
+                    <th>Timer</th>
+                    <th>Responses</th>
+                  </tr>
+                </thead>
+                <tbody>
+              <tr>
+                <td>Group 1</td>
+                <td>5</td>
+                <td>5 minutes</td>
+                <td><strong>Captcha</strong> (100% of requests until solved) display a captcha</br>
+              </td>
+            </tr>
+                <tr>
+                  <td>Group 2</td>
+                  <td>10</td>
+                  <td>5 minutes</td>
+                  <td><strong>Captcha</strong> (100% of requests until solves) display a captcha</br>
+                  <strong>Message</strong> (100% of requestss) display a warning message</br>
+                </td>
+              </tr>
+              <tr>
+                <td>Group 3</td>
+                <td>20</td>
+                <td>30 minutes</td>
+                <td><strong>Captcha</strong> (100% of requests until solved) display a captcha</br>
+                <strong>Server Error</strong> If captcha is solved, (60% of requests) display a server error.</br>
+                <strong>Not Found</strong> If captcha is solved, ((20% of requests) display a 404 error</br>
+                <strong>None</strong> If captcha is solved, (20% of requests) do nothing</br>
+              </td>
+            </tr>
+          </tbody>
+        </table><br />
+        <br />
+        <br />
+        <br><br><br>
+        </div>
+        <div class="span8 hidden" id="heavy">
+          <p>This configuration places Ensnare in 'Heavy' mode. This mode is agressive and uses all sorts of fun trap responses including redirect, redirect_loop, server_error, random, block, and time throttle. The global violation count will reset if no
+            traps for the associated IP trigger in 4000 seconds.</p><br />
+        <pre class="prettyprint" id="heavy_config" name="heavy_config">
+# heavy configuration
+Ensnare.setup do |config|
+
+# Configuration type
+config.type = :heavy
+
+# Settings to configure the operation mode of config.
+# Disable Ensnare from running.
+config.mode = :enforce
+
+# Log violation counts for both user account and IP address that triggers the trap
+config.trap_on = :ip
+
+# Sets the global violation timer (in seconds) which will reset
+# the violation count for the assocaited IP or user account.
+# This violation count resets after the suspicious IP or user account stops triggering traps.
+config.global_timer = 4000
+
+config.enabled_traps = [
+{:type=>:cookie,
+ :options=>{
+    # :admin => this sets a cookie named admin with a boolean value set to false
+    # :debug => this sets a cookie named debug with a boolean value set to false
+    # :random => this generates a random N character cookie with a random encrypted value
+    # :google => this generates 4 random cookies that look like Google tracking
+    # :uid => this sets a cookie that look like a UID
+    # :gid => this sets a cookie that looks like a GID
+
+    :predefined_cookies=>[:random, :uid, :gid]
+ }
+ },
+{:type=>:parameter,
+ :options=>{
+    # Select a predefined selection of parameter names.
+    # :admin => this sets a cookie named admin with a boolean value set to false
+    # :debug => this sets a cookie named debug with a boolean value set to false
+    # :random => this cookie generates a random N character cookie with a random encrypted value
+    # :uid => this sets a cookie that look like a UID
+    # :gid => this sets a cookie that looks like a GID
+
+    :predefined_parameters=>[:debug, :random]
+ }
+ }
+]
+
+
+# Violation Threshold Group 1
+config.thresholds << {:timer=>360, :violation_count=>5,
+  :responses=>[
+    {:response=>"301",:weight=>20,:redirect_to=>"/"},
+    {:response=>"throttle",:weight=>30,:min_delay=>5,:max_delay=>10},
+    {:response=>"none", :weight=>50}
+]}
+
+# Violation Threshold Group 2
+config.thresholds << {:timer=>720, :violation_count=>10,
+  :responses=>[
+    {:response=>"301",:weight=>60,:redirect_to=>"/"},
+    {:response=>"throttle",:weight=>40,:min_delay=>5,:max_delay=>10},
+]}
+
+# Violation Threshold Group 3
+config.thresholds << {:timer=>2160, :violation_count=>20,
+  :responses=>[
+    {:response=>"server_error",:weight=>30},
+    {:response=>"not_found",:weight=>10},
+    {:response=>"random_content",:weight=>10},
+    {:response=>"random_content",:weight=>10},
+    {:response=>"throttle",:weight=>20,:min_delay=>10,:max_delay=>15},
+    {:response=>"none", :weight=>20}
+]}
+
+# Violation Threshold Group 4
+config.thresholds << {:timer=>3600, :violation_count=>30,
+  :responses=>[
+  {:response=>"block"}
+]}
+    end
+        </pre>
+          <h2>Description</h2><br />
+            <p>The following <strong>Cookie</strong> traps are enabled:</p>
+            <table class="table table-striped">
+              <thead>
+                <tr>
+                  <th>Cookie</th>
+                  <th>Value</th>
+                  <th>Description</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>random</td>
+                  <td>random 32 character cookie name and value</td>
+                  <td>This cookie is a random N character name with a random encrypted
+                    value</td>
+                  </tr>
+                  <tr>
+                    <td>uid</td>
+                    <td>integer</td>
+                    <td>uid parameter with a randomm numerical value</td>
+                  </tr>
+                  <tr>
+                    <td>gid</td>
+                    <td>integer</td>
+                    <td>gid parameter with a random numerical value</td>
+                  </tr>
+                </tbody>
+              </table><br />
+
+              <p>The following <strong>Parameter</strong> traps are enabled:</p>
+
+              <table class="table table-striped">
+                <thead>
+                  <tr>
+                    <th>Parameter</th>
+                    <th>Value</th>
+                    <th>Description</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>debug</td>
+                    <td>boolean</td>
+                    <td>debug parameter with a boolean set to false</td>
+                  </tr>
+                  <td>random</td>
+                  <td>random 32 character cookie name and value</td>
+                  <td>This cookie is a random N character name with a random encrypted
+                    value</td>
+                  </tr>
+                </tbody>
+              </table><br />
+              <br />
+
+              <p>The following <strong>Violation Thresholds</strong> are configured:</p>
+              <table class="table table-striped">
+                <thead>
+                  <tr>
+                    <th>Threshold</th>
+                    <th>Violation Count</th>
+                    <th>Timer</th>
+                    <th>Responses</th>
+                  </tr>
+                </thead>
+                <tbody>
+              <tr>
+                <td>Group 1</td>
+                <td>5</td>
+                <td>5 minutes</td>
+                <td>
+                  <strong>301</strong> (20% of requests) redirect to root of web application</br>
+                  <strong>Throttle</strong> (30% of requests) result in 5-10 second delay</br>
+                  <strong>None</strong> (40% of requestss) do nothing</br>
+              </td>
+            </tr>
+                <tr>
+                  <td>Group 2</td>
+                  <td>10</td>
+                  <td>5 minutes</td>
+                  <td>
+                    <strong>301</strong> (60% of requests) redirect to root of web application</br>
+                    <strong>Throttle</strong> (40% of requests) result in 5-10 second delay</br>
+                  </td>
+              </tr>
+              <tr>
+                <td>Group 3</td>
+                <td>20</td>
+                <td>30 minutes</td>
+                <td>
+                  <strong>Server Error</strong>(30% of requests) display a server error</br>
+                  <strong>Not Found</strong>(10% of requests) display a 404 not found error</br>
+                  <strong>Random</strong>(10% of requests) display a random message of varying lengths</br>
+                  <strong>301 Loop</strong>(10% of requests) results in a 301 loop</br>
+                  <strong>Throttle</strong>(20% of requests) results a 10-15 second delay</br>
+                  <strong>None</strong> (20% of requests) do nothing</br>
+                </td>
+            </tr>
+            <tr>
+                <td>Group 4</td>
+                <td>50</td>
+                <td>60 minutes</td>
+                <td>
+                  <strong>Block</strong> (100% of requests) block the attacker</br>
+                </td>
+            </tr>
+          </tbody>
+        </table>
+<br><br><br>
+        </div>
+
+
+        <div class="span8 hidden" id="custom">
+                    <p>Feeling adventerous?  Create your own configuration file!
+                      Here is a fully annotated configuration file you can use
+                      as a template to build out your config.</p><br />
+          <pre class="prettyprint" id="custom_config">
+Ensnare.setup do |config|
+
+  # ############### #
+  # Global Settings #
+  # ############### #
+
+  # Configuration type
+  config.type = :custom
+
+  # Settings to configure the operation mode of config.
+  # Disable Ensnare from running.
+  # Options: :disabled, :enforce, :log
+  config.mode = :enforce
+
+  # Log violation counts on ip address, user, and session
+  config.trap_on = [:ip, :user, :session]
+
+  # Identiifes the method used to retrieve the currently logged-in user object/id
+  config.current_user_method = :current_user
+
+  # Identifies the method/attribute on the user object (returned when the defined current_user_method is run)
+  # that should be used to uniquely identify the user. So for example, if you can get the currently logged
+  # in user's id by calling current_user.id, the "current_user_method" should be set to :current_user
+  # and the "current_user_identifier" should be set to :id. If the current_user_method itself returns
+  # the appropriate identifer (such as an id value or username) then the "current_user_identifier"
+  # does not need to be specified. Additionally, if the application does not have the concept of users,
+  # or if you do not want to track violations by user, the "current_user_method" can also remain unspecified
+  config.current_user_identifier = :id
+
+  # Sets the global violation timer (in seconds) which will reset the violation count for the assocaited
+  # IP or user account.
+  # This violation count resets after the suspicious IP or user account stops triggering violations.
+  config.global_timer = 400000
+
+  # ################## #
+  # Configure Trapping #
+  # ################## #
+
+  # These settings will help you configure how trapping works within Ensnare.
+
+  # Randomizer:
+  # Specify a function to generate random data you can use for cookie or parameter values.
+  # Make sure your random function evals or the app will not run.
+
+  # Creates a random sting of length 50
+  # randomizer = (0...50).map{ ('a'..'z').to_a[rand(26)] }.join
+
+  # Creates a random alpha-numeric string of length 32
+  # randomizer = rand(36**length).to_s(36)
+
+  # Creates a random 40 character base64 encoded string
+  # require 'securerandom'
+  # randomizer = SecureRandom.urlsafe_base64(40)
+
+  # Create a random hex string
+  require 'securerandom'
+  config.randomizer = SecureRandom.method(:hex)
+
+  # Specify all of the things you would like to trap
+  # cookies - enables trap cookies on requests.
+  # parameter - enables trap parameters on requests.
+  # routing_error - bad paths trigger traps
+  # custom - define something custom here
+
+  config.enabled_traps = [
+
+    {:type=>:cookie,
+     :options=>{
+        # Specify an array of cookie names and their values you would like to use for your application.
+        # If no cookie names are specified, you can select some predefined cookies with the next setting.
+        :cookie_names=>{:oracle_001 => "s-2fslsasflkjflkjasfs2-f", :ool0020093 => "a4d1fc354f49c40c74c00b963adc13"},
+        # Select a predefined selection of cookie names.
+        # :admin => this sets a cookie named admin with a boolean value set to false
+        # :debug => this sets a cookie named debug with a boolean value set to false
+        # :random => this generates a random N character cookie with a random encrypted value
+        # :google => this generates 4 random cookies that look like Google tracking
+        # :uid => this sets a cookie that look like a UID
+        # :gid => this sets a cookie that looks like a GID
+        :predefined_cookies=>[:admin, :random, :google, :uid, :debug]
+     }
+     },
+    {:type=>:parameter,
+     :options=>{
+        # Specify an array of parameter names and their values you would like to use for your application.
+        # If no parameter names are specified, you can select some predefined parameters with
+        # the next setting.
+        #
+        # Notice how the config.randomizer function is passed in here, this makes the parameter
+        # value non static:
+        :parameter_names=>{:coupon_code => "84763949", :exp_csrf_token => config.randomizer},
+        # Select a predefined selection of parameter names.
+        # :admin => this sets a cookie named admin with a boolean value set to false
+        # :debug => this sets a cookie named debug with a boolean value set to false
+        # :random => this cookie generates a random N character cookie with a random encrypted value
+        # :uid => this sets a cookie that look like a UID
+        # :gid => this sets a cookie that looks like a GID
+        :predefined_parameters=>[:uid, :admin, :debug, :random]
+     }
+     },
+    {:type=>:routing_error,
+     :options=>{
+      # Specify a list of paths to trigger traps on.  Very useful for detecting directory busting attacks
+       :bad_paths=>["/admin", "/debug", "/robots", "/destory"],
+       # Each trap has a weight of 10.  Instead of only resulting in one violation, this will count as 10!
+       :violation_weight=>10
+     }
+     }
+  ]
+
+  # ####################### #
+  # Configure Responses     #
+  # ####################### #
+
+  # These settings will help you configure how responses work within Ensnare.
+
+  # Response Names:
+  # => none
+  # => message
+  # => redirect
+  # => redirect_loop
+  # => throttle
+  # => captcha
+  # => not_found
+  # => server_error
+  # => random_content
+  # => block
+
+
+  # Response Overview
+
+  # This section describes how resonses work and what settings you can specify.
+  # Examples are shown in the violation group configuration settings that describe how to group
+  # these together for ultimate annoyance!
+  # You may notice each response has a weight.  You can use the weight attribute to create some
+  # randomness when grouping these together.  If you set the weight to 0 on each response or don't
+  # set the weight at all, they will run in a round robin fashion (aka fixed).
+
+  # => none
+  # This response does nothing at all!  Use this response to simply control the likelihood of
+  # responses being triggered.  By setting the weight on this response higher, the likelihood of
+  # other respinses being triggered when a violation threshold is reached decreases.  This may help
+  # confuse an attacker and adds a bit of randomness.
+  # => none settings
+
+  # :weight => int(specify the likelihood of this response being triggered in a violation thresholds)
+
+
+  # => message
+  # This response displays a message you specify to warn the user to stop their malicious activity.
+  # => message settings
+
+  # :weight  => int(specify the likelihood of this response being triggered in a violation threshold)
+  # :content => str(content to display in the warning message)
+
+
+  # => redirect
+  # This response simply redirects the user to either your webroot or a website you specify.
+  # This seemingly innocuous response can be very effective if setup on a violation threshold
+  # that includes multiple responses.
+
+  # Imagine trying to navigate a website that intermittently redirects you out of the expected
+  # application flow. This would make it very hard to attack multi step forms.
+  # => redirect settings
+
+  # :weight  => int(specify the likelihood of this response being triggered in a violation threshold)
+  # :url => str(url or path to redirect the attacker to.  default is webroot)
+
+
+  # => redirect_loop
+  # The redirect loop response puts the IP or User account into an endless 301 loop.  This times out
+  # in most modern browsers pretty quickly, however it fills up the proxy log (if the user is doing
+  # a manual attack) and it is generally confusing. Often times, attackers will restart their web
+  # browsers or terminate a session if an application exhibits this type of behavior.
+  # => redirect_loop settings
+
+  # :weight  => int(specify the likelihood of this response being triggered in a violation threshold)
+  # :parameter => str(parameter to send nonce too)
+
+
+  # => throttle
+  # One of the most effective responses, the throttle implements a random or fixed delay
+  # time when requesting a page. Long delays can result in application scanner instability
+  # and sometimes result in false positives being generated such as time based sql injection.
+  # => throttle settings
+
+  # :weight  => int(specify the likelihood of this response being triggered in a violation threshold)
+  # :min_delay => int(the minimum amount of time in seconds to delay the application)
+  # :max_delay => int(the maximum amount of time in seconds to delay the application)
+  # Note: you can set the min and max delay to the same time to create a fixed delay.
+
+
+  # => captcha
+  # One of the most effective responses for scanners, a captcha image must be solved before
+  # facilitating a request. Long delays can result in application scanner instability and
+  # sometimes result in false positives being generated such as time based sql injection.
+  # => throttle settings
+
+  # :weight  => int(specify the likelihood of this response being triggered in a violation threshold)
+  # :persist => boolean(if True, every request this function gets called until the user solves the captcha)
+  # Note: We don't suggest you set weight AND persist.  This response is most effective when just
+  # set as persistent.
+
+  # => not_found
+  # This response will result in responses as a 404 page.
+  # 404 pages may confuse application scanners about if the requested resource or request is valid.
+  # Some scanners may remove the request from scope if they receive 404 errors.
+  # => 404 settings
+
+  # :weight  => int(specify the likelihood of this resposne being triggered in a violation threshold)
+  # :location => str(specify the location of the 404 page to display.  default is /public/404.html)
+
+
+  # => server_error
+  # This response sends a 500 page to as the response to a request.  500 errors are usually displayed
+  # when the application framework cannot handle a request.  This can be especially lucrative for
+  # a manual attacker, who may think he/she is effectively causing an application error.
+  # This may result in the attacker spending unnecessary time investigating a false positive.
+  # => server_error settings
+
+  # :weight  => int(specify the likelihood of this response being triggered in a violation threshold)
+  # :location => str(specify the location of the 505 page to display.  default is /public/505.html)
+
+
+  # => random_content
+  # This response returns random content when triggered.
+  # Simply used to confuse the manual attacker, garbled strings of varying length and nonsense will
+  # be returned.
+  # => random_content settings
+
+  # :weight  => int(specify the likelihood of this response being triggered in a violation threshold)
+  # :min_size =>  int(specify the minimum size in bytes of the randomly generated response)
+  # :max_size => int(specify the maximum size in bytes of the randomly generated response)
+
+
+  # => block
+  # This response blocks the IP address or user from accessing the site.  A blank page is returned with a
+  # HTTP status code 200 and a content-length of 0.  This block happens for the duration of the violation
+  # threshold timer.
+  # Very aggressive.
+  # => block settings
+
+  # :weight  => int(specify the likelihood of this response being triggered in a violation threshold)
+
+
+  # ################################
+  # Configure violation thresholds #
+  # ################################
+
+  # When a violation count gets triggered, the violation threshold activates, triggers a timer,
+  # and executes a response.
+  # The timer resets each time an additional trap is triggered.  If the attacker backs off and the
+  # violation threshold timer expires, the application will operate normally.
+  # However, as soon as the attacker triggers another violation, the timer will reset and the violation
+  # threshold group will resume.
+
+  # You can setup multiple violation thresholds to be triggered when a threshold is hit.  This adds
+  # quite a bit of power into really allowing the application to vary the trap responses to aid in
+  # confusion and hopefully thwart an attacker.
+
+
+  # Threshold settings:
+
+  # config.thresholds << {:timer=>int(time in seconds),
+  #                      :violation_count=>int(amount of traps that need to be triggered to start the threshold),
+  #                      :responses=>array[
+  #                         {:response=>str(name of trap),options},
+  #                         {:response=>str(name of trap),options}
+  #                         ]}
+
+  config.thresholds = []
+
+  # Example 1:
+  config.thresholds << {:timer=>600, :trap_count=>5,
+                        :traps=>[
+                          {:trap=>"redirect",:weight=>50,:url=>"/"},
+                          {:trap=>"throttle",:weight=>20,:min_delay=>10,:max_delay=>20},
+                          {:trap=>"none", :weight=>30}
+  ]}
+
+  # This violation threshold group will run first and for 600 seconds if the violation count reaches
+  # 5 or higher.
+  # Each time a trap is triggered, the timer is reset. The redirect response will redirect a user to
+  # the root of the web appliation "/" 50% of the requests.  The web application will
+  # delay responses randomly between 1 and 20 seconds 10% of the requests.  40% of the time,
+  # the application will behave as expected (aka. the none trap response).
+
+
+  # Example 2:
+
+  config.thresholds << {:timer=>900, :trap_count=>15,
+                        :traps=>[
+                          {:trap=>"captcha", :persist=>true },
+                          {:trap=>"redirect",:weight=>10,:url=>"/"},
+                          {:trap=>"throttle",:weight=>30,:min_delay=>15,:max_delay=>20},
+                          {:trap=>"not_found",:weight=>10},
+                          {:trap=>"server_error", :weight=>20},
+                          {:trap=>"redirect_loop",:weight=>5, :parameter=>'test'},
+                          {:trap=>"random_content",:weight=>5,:min_size=>500,:max_size=>1500},
+                          {:trap=>"none", :weight=>20}
+  ]}
+
+
+  # This violation threshold group will run if the violation count reaches 15.  The timer will run for
+  # 900 seconds, and disable the first violation group. Each time a trap is triggered, this timer is reset.
+  # A captcha image will occur on each request until the user solves the captcha.
+  # If the captcha is solved, the follwoing events occur:
+  # The throttle response will delay responses randomly between 15 and 20 seconds 30% of the time.
+  # Not found will result in 404 error messages will occur 10% of requests.
+  # Server error response will result in 500 error messages which will occur 20% of requests.
+  # A redirect loop will occur 5% of the time.
+  # Random content will be displayed with a length of 500 to 1500 bytes 5% of requests.
+  # 20% of the time, the application will behave as expected.
+
+  # # Example 3:
+
+  config.thresholds << {:timer=>37000, :trap_count=>75,
+                       :traps=>[
+                          {:trap=>"block"}
+                        ]}
+
+  # This violation threshold group will run if the violation count reaches 75.  The timer will run for
+  # 1 hour and disable the second threshold group. Each time a trap is triggered, this timer is reset.
+  # The application will block the associated IP address or user account for the duration of the threshold.
+end
+
+# Captcha configuraion
+Recaptcha.configure do |config|
+  config.public_key  = "6LeNU-kSAAAAAEWc25L1P4_B71dmsKoRLKe1lbu1"
+  config.private_key = "6LeNU-kSAAAAACnt2CRkgO3Pl3Q3twO3l-6Y3tUx"
+end
+
+</pre>
+        </div>
+      </div>
+    </div>
+    <script src=
+    "https://google-code-prettify.googlecode.com/svn/loader/run_prettify.js" type=
+    "text/javascript">
+    </script>
+  </div>
+
+  <div class="well">
+    <div class="navbar">
+      <div class="row-fluid">
+        <div class="row-fluid">
+          <div class="span12">
+            <div class="span8">
+            </div>
+            <div class="span4">
+              <p class="muted pull-right">By Andy Hoernecke and Scott Behrens</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <%= javascript_include_tag "ensnare/ZeroClipboard.js" %>
+  <%= javascript_include_tag "ensnare/clippy.js" %>
+  <%= javascript_include_tag "ensnare/on_handler.js" %>
+</body>
+</html>
