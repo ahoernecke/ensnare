@@ -229,7 +229,8 @@ Ensnare.setup do |config|
   # Example 1:
   config.thresholds << {:timer=>60, :trap_count=>1,
                         :traps=>[
-                          {:trap=>"flash_error" }
+                          {:trap=>"random_content", :weight=>10, :min_size=>500, :max_size=>5000 },
+                          {:trap=>"captcha", :persist=>true }
   ]}
 
   # This violation threshold group will run first and for 600 seconds if the violation count reaches 5 or higher.  Each time a trap is triggered,

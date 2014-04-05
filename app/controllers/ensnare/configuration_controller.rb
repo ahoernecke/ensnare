@@ -2,6 +2,7 @@ require_dependency "ensnare/application_controller"
 
 module Ensnare
   class ConfigurationController < ApplicationController
+  layout 'ensnare/dashboard'
 
     def change_mode
       if( %w[enforce disabled log].include?(params[:mode]))

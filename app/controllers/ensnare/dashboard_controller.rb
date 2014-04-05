@@ -2,6 +2,8 @@ require_dependency "ensnare/application_controller"
 
 module Ensnare
   class DashboardController < ApplicationController
+    layout 'ensnare/dashboard'
+    
     def mode
       #render mode erb, read config file and toggle switches
       @mode = Ensnare.mode

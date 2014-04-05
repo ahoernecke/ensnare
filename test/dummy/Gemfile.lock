@@ -1,7 +1,7 @@
 PATH
   remote: ../../
   specs:
-    ensnare (0.0.1)
+    ensnare (0.1beta)
       rails (~> 3.2.14)
       twitter-bootstrap-rails
 

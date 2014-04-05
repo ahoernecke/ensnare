@@ -6,6 +6,7 @@ module Ensnare
   class ViolationsController < ApplicationController
     before_filter :ensnare, :only=>:routing_error
     skip_before_filter :check_privileges
+    layout 'ensnare/application'
 
     def redirect
       redirect_to redir_url(:id=>Random.rand(1000000))
