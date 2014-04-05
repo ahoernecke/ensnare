@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    ensnare (0.0.1)
+    ensnare (0.1beta)
       rails (~> 3.2.14)
       twitter-bootstrap-rails
 
@@ -111,8 +111,8 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
-  ensnare!
   coffee-rails (~> 3.2.1)
+  ensnare!
   jquery-rails
   sass-rails (~> 3.2.3)
   sqlite3
