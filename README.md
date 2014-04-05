@@ -65,7 +65,7 @@ To prevent unnecessary users from accessing the dashboard, add the following to 
  
 #Bugs#
 
-Issue with Bootstrap and Dashboard (stylesheet mismatch in firefox).
+[Dashboard CSS Issues in Firefox](https://github.com/ahoernecke/ensnare/issues/1)
 
 #Resources#
 
