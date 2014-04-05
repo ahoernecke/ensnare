@@ -7,14 +7,14 @@
 <div class="container">
   <div class="row">
     <div class="span6">
-      <% if Ensnare.error_message %>
+      <% if Ensnare.error_message.present? %>
       <div class="alert alert-error">
         <button type="button" class="close" data-dismiss="alert">&times;</button>
 
         <%= Ensnare.error_message %>
       </div>
       <% end %>
-      <% if Ensnare.warning_message %>
+      <% if Ensnare.warning_message.present? %>
       <div class="alert alert-warning">
         <button type="button" class="close" data-dismiss="alert">&times;</button>
 
