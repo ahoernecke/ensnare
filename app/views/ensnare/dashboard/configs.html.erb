@@ -461,7 +461,7 @@ end
 
         <div class="span8 hidden" id="medium">
           <p>This configuration places Ensnare in 'Medium' mode. This mode warns the attacker as well as present captcha images to solve and some application error messages. The global violation count will reset if no
-            traps for the associated IP trigger in 4000 seconds.</p><br />
+            traps for the associated IP trigger in 4000 seconds.<b>You must have captcha configured as described on the <a href="https://github.com/ahoernecke/ensnare/wiki">Ensnare Wiki page</a>to use captcha!</b></p><br />
           <pre class="prettyprint" id="medium_config">
 # medium configuration
 Ensnare.setup do |config|
@@ -512,20 +512,18 @@ config.thresholds = []
 # Violation Threshold Group 1
 config.thresholds << {:timer=>360, :violation_count=>5,
 :responses=>[
-{:response=>"captcha"}
+{:response=>"captcha", :persist=>true}
 ]}
 
 # Violation Threshold Group 2
 config.thresholds << {:timer=>360, :violation_count=>10,
 :responses=>[
-{:response=>"captcha"},
 {:response=>"message",:weight=>100,:content=>"Stop messing with me!"}
 ]}
 
 # Violation Threshold Group 3
 config.thresholds << {:timer=>2160, :violation_count=>20,
 :responses=>[
-{:response=>"captcha"},
 {:response=>"server_error",:weight=>60},
 {:response=>"not_found",:weight=>20},
 {:response=>"none",:weight=>20}
@@ -608,7 +606,7 @@ end
                   <td>Group 2</td>
                   <td>10</td>
                   <td>5 minutes</td>
-                  <td><strong>Captcha</strong> (100% of requests until solves) display a captcha</br>
+                  <td>
                   <strong>Message</strong> (100% of requestss) display a warning message</br>
                 </td>
               </tr>
@@ -616,10 +614,10 @@ end
                 <td>Group 3</td>
                 <td>20</td>
                 <td>30 minutes</td>
-                <td><strong>Captcha</strong> (100% of requests until solved) display a captcha</br>
-                <strong>Server Error</strong> If captcha is solved, (60% of requests) display a server error.</br>
-                <strong>Not Found</strong> If captcha is solved, ((20% of requests) display a 404 error</br>
-                <strong>None</strong> If captcha is solved, (20% of requests) do nothing</br>
+                <td>
+                <strong>Server Error</strong> (60% of requests) display a server error.</br>
+                <strong>Not Found</strong> (20% of requests) display a 404 error</br>
+                <strong>None</strong> (20% of requests) do nothing</br>
               </td>
             </tr>
           </tbody>
@@ -1151,12 +1149,6 @@ Ensnare.setup do |config|
   # This violation threshold group will run if the violation count reaches 75.  The timer will run for
   # 1 hour and disable the second threshold group. Each time a trap is triggered, this timer is reset.
   # The application will block the associated IP address or user account for the duration of the threshold.
-end
-
-# Captcha configuraion
-Recaptcha.configure do |config|
-  config.public_key  = "6LeNU-kSAAAAAEWc25L1P4_B71dmsKoRLKe1lbu1"
-  config.private_key = "6LeNU-kSAAAAACnt2CRkgO3Pl3Q3twO3l-6Y3tUx"
 end
 
 </pre>
