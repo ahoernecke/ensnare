@@ -63,6 +63,10 @@ To prevent unnecessary users from accessing the dashboard, add the following to 
 ```
  *NOTE:* you need to have a method defined to check if the user is the admin.
  
+#Documentation#
+
+[**Wiki**](https://github.com/ahoernecke/ensnare/wiki)
+
 #Bugs#
 
 [Dashboard CSS Issues in Firefox](https://github.com/ahoernecke/ensnare/issues/1)
