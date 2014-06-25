@@ -48,7 +48,7 @@ Create an Ensnare config file:
 ```
 Take a look at the example ensnare.rb file:
 ```shell    
-    vi config/initializes/ensanre.rb
+    vi config/initializes/ensnare.rb
 ```
 After you start your application, take a look at the dashboard:
 
@@ -56,7 +56,7 @@ After you start your application, take a look at the dashboard:
 
 In order to access the dashboard, this step needs to be performed.   
 
-To prevent unnecessary users from accessing the dashboard, add the following to the `config/initalizers/ensanre.rb` file:
+To prevent unnecessary users from accessing the dashboard, add the following to the `config/initalizers/ensnare.rb` file:
 ```ruby
   config.dashboard_user_method = :current_user
   config.dashboard_authorization_method = :admin?
