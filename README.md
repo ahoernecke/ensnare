@@ -52,7 +52,7 @@ Take a look at the example ensnare.rb file:
 ```
 After you start your application, take a look at the dashboard:
 
-    http://your-application.com/ensnare/dashboard
+    http://your-application.com/ensnare/dashboard/violations
 
 In order to access the dashboard, this step needs to be performed.   
 
