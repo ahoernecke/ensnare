@@ -6,7 +6,7 @@ Ensnare uses a combination of [Honey Traps](https://github.com/ahoernecke/Ensnar
 
 Already heard about the tool and want to try it out?  Do it!
 
-#Install#
+# Install #
 
 Add the gem to your project's Gemfile:
 ```ruby
@@ -63,19 +63,19 @@ To prevent unnecessary users from accessing the dashboard, add the following to 
 ```
  *NOTE:* you need to have a method defined to check if the user is the admin.
  
-#Documentation#
+# Documentation #
 
 [**Wiki**](https://github.com/ahoernecke/ensnare/wiki)
 
-#Bugs#
+# Bugs #
 
 [Dashboard CSS Issues in Firefox](https://github.com/ahoernecke/ensnare/issues/1)
 
-#Resources#
+# Resources #
 
 http://books.google.com/books?id=flC9dFFLWIsC&pg=PT111&lpg=PT111&dq=honey+trap+mod+security&source=bl&ots=zKxJvehMpA&sig=E9qKn7L4siEk01caEF6wqofbbm8&hl=en&sa=X&ei=_iRUUoCRJKPiiwK8y4HIBA&ved=0CFUQ6AEwBg#v=onepage&q=honey trap mod security&f=false
 
-##Contact##
+## Contact ##
 Created by [Andy Hoernecke](https://github.com/ahoernecke) and [Scott Behrens](https://github.com/sbehrens).
 
 Feel free to reach out to us if you have questions or want to contribute to the project!
